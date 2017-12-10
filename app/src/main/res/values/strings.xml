@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Toolbox</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="PickImage">Pick Image</string>
+    <string name="DialogPickNoForShift">Pick a number to shift</string>
+    <string name="DialogPickNoForThreshold">Pick a threshold number</string>
+    <string name="DialogDescShiftBin">Seek a number to shift</string>
+    <string name="DialogThreshold">Threshold is {0}</string>
+    <string name="DialogShiftDoNothing">Nothing change</string>
+    <string name="DialogShiftBinLeft">Shift {0} binary number to the left</string>
+    <string name="DialogShiftBinRight">Shift {0} binary number to the right</string>
+    <string name="DialogShiftHexLeft">Shift {0} hexadecimal number to the left</string>
+    <string name="DialogShiftHexRight">Shift {0} hexadecimal number to the right</string>
+</resources>

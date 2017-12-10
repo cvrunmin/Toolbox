@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="drawer_layout" type="id"/>
+    <item name="toolbar" type="id"/>
+    <item name="nav_view" type="id"/>
+    <item name="home" type="id"/>
+    <item name="list_view" type="id"/>
+    <item name="imgIcon" type="id"/>
+    <item name="txtApp" type="id"/>
+    <item name="txtPackage" type="id"/>
+    <item name="textView1" type="id"/>
+    <item name="textView2" type="id"/>
+    <item name="editTextO" type="id"/>
+    <item name="editTextE" type="id"/>
+    <item name="butEncode" type="id"/>
+    <item name="butDecode" type="id"/>
+    <item name="spinnerET" type="id"/>
+    <item name="switchFU" type="id"/>
+    <item name="switchETE" type="id"/>
+    <item name="butEDImgs" type="id"/>
+</resources>
