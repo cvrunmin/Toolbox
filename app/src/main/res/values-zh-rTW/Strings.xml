@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Hello">Hello World, Click Me!</string>
     <string name="app_name">Toolbox</string>
     <string name="PickImage">選擇圖片</string>
   <string name="DialogPickNoForShift">選擇移位數</string>
   <string name="DialogPickNoForThreshold">選擇臨界值</string>
-  <string name="DialogThreshold">臨界值為 {0}</string>
+  <string name="DialogThreshold">臨界值為 %d</string>
   <string name="DialogShiftDoNothing">不作變動</string>
-  <string name="DialogShiftBinLeft">向左移 {0} 二進制位</string>
-  <string name="DialogShiftBinRight">向右移 {0} 二進制位</string>
-  <string name="DialogShiftHexLeft">向左移 {0} 十六進制位</string>
-  <string name="DialogShiftHexRight">向右移 {0} 十六進制位</string>
+  <string name="DialogShiftBinLeft">向左移 %d 二進制位</string>
+  <string name="DialogShiftBinRight">向右移 %d 二進制位</string>
+  <string name="DialogShiftHexLeft">向左移 %d 十六進制位</string>
+  <string name="DialogShiftHexRight">向右移 %d 十六進制位</string>
 </resources>

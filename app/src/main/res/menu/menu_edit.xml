@@ -1,12 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:app="http://schemas.android.com/apk/res-auto">
-  <item android:id="@+id/select" android:icon="@android:drawable/ic_menu_gallery" android:title="Gallery" app:showAsAction="ifRoom"></item>
-  <item android:id="@+id/reset" android:icon="@android:drawable/ic_menu_revert" android:title="Reset" app:showAsAction="ifRoom"></item>
-    <item android:id="@+id/saveMain" android:icon="@android:drawable/ic_menu_save" android:title="Save" app:showAsAction="ifRoom">
-      <menu>
-        <item android:id="@+id/save" android:icon="@android:drawable/ic_menu_save" android:title="Save" app:showAsAction="ifRoom"></item>
-        <item android:id="@+id/saveAsCopy" android:title="Save as Copy" app:showAsAction="ifRoom"></item>
-      </menu>
-    </item>
+  <item
+      android:id="@+id/select"
+      android:icon="@drawable/ic_menu_gallery"
+      android:title="Gallery"
+      app:showAsAction="ifRoom"></item>
+  <item
+      android:id="@+id/reset"
+      android:icon="@drawable/ic_menu_undo"
+      android:title="Reset"
+      app:showAsAction="ifRoom"></item>
+  <item
+      android:id="@+id/flip"
+      android:icon="@drawable/ic_menu_flip"
+      android:title="Flip"
+      app:showAsAction="ifRoom">
+    <menu>
+      <item
+          android:id="@+id/flipH"
+          android:icon="@drawable/ic_menu_flip"
+          android:title="Flip horizontally" />
+      <item
+          android:id="@+id/flipV"
+          android:icon="@drawable/ic_menu_flip_vertical"
+          android:title="Flip vertically" />
+    </menu>
+  </item>
+  <item
+      android:id="@+id/saveMain"
+      android:icon="@drawable/ic_menu_save"
+      android:title="Save"
+      app:showAsAction="ifRoom">
+    <menu>
+      <item
+          android:id="@+id/save"
+          android:icon="@drawable/ic_menu_save"
+          android:title="Save"
+          app:showAsAction="ifRoom"></item>
+      <item
+          android:id="@+id/saveAsCopy"
+          android:title="Save as Copy"
+          app:showAsAction="ifRoom"></item>
+    </menu>
+  </item>
 </menu>

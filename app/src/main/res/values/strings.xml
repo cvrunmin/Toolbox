@@ -11,10 +11,13 @@
     <string name="DialogPickNoForShift">Pick a number to shift</string>
     <string name="DialogPickNoForThreshold">Pick a threshold number</string>
     <string name="DialogDescShiftBin">Seek a number to shift</string>
-    <string name="DialogThreshold">Threshold is {0}</string>
+    <string name="DialogThreshold">Threshold is %d</string>
     <string name="DialogShiftDoNothing">Nothing change</string>
-    <string name="DialogShiftBinLeft">Shift {0} binary number to the left</string>
-    <string name="DialogShiftBinRight">Shift {0} binary number to the right</string>
-    <string name="DialogShiftHexLeft">Shift {0} hexadecimal number to the left</string>
-    <string name="DialogShiftHexRight">Shift {0} hexadecimal number to the right</string>
+    <string name="DialogShiftBinLeft">Shift %d binary number to the left</string>
+    <string name="DialogShiftBinRight">Shift %d binary number to the right</string>
+    <string name="DialogShiftHexLeft">Shift %d hexadecimal number to the left</string>
+    <string name="DialogShiftHexRight">Shift %d hexadecimal number to the right</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

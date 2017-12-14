@@ -62,14 +62,6 @@ class LaunchingActivity : AppCompatActivity() {
                             startActivity(launchIntent)
                         }
                     }
-                    /*onLongClick {
-                        val info = (adapter as AppAdapter).getItem(this@listView.selectedItemPosition)
-                        val launchIntent = packageManager.getLaunchIntentForPackage(info.packageName)
-                        if (launchIntent != null) {
-                            startActivity(launchIntent)
-                        }
-                    }*/
-
                 }
             }.lparams(width = matchParent, height = matchParent)
             navigationView {
@@ -138,13 +130,13 @@ class AppAdapter(context: Context?, resource: Int, objects: MutableList<Applicat
                     }.lparams(width = dip(45), height = dip(45))
                     var appName = textView {
                         id = R.id.txtApp
-                        textAppearance = android.R.attr.textAppearanceLarge
+                        textAppearance = android.R.style.TextAppearance_DeviceDefault_Large
                     }.lparams {
                         rightOf(icon)
                     }
                     var packageName = textView {
                         id = R.id.txtPackage
-                        textAppearance = android.R.attr.textAppearanceSmall
+                        textAppearance = android.R.style.TextAppearance_DeviceDefault_Small
                     }.lparams{
                         rightOf(icon)
                         below(appName)

@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.github.cvrunmin.toolbox">
+    package="io.github.cvrunmin.toolbox">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
         <activity
-                android:name=".MainActivity"
-                android:label="@string/title_activity_main"
-                android:theme="@style/AppTheme.NoActionBar">
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".EditActivity"
-                android:label="Image Editor"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".EditActivity"
+            android:label="Image Editor"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-                android:name=".EncryptActivity"
-                android:label="Encrypter"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".EncryptActivity"
+            android:label="Encrypter"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-                android:name=".LaunchingActivity"
-                android:label="Launcher"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".LaunchingActivity"
+            android:label="Launcher"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".CryptImagesService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".CryptImagesService$BroadCaster"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>

@@ -25,6 +25,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Switch
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.navigationView
@@ -62,10 +63,10 @@ class EncryptActivity : AppCompatActivity(){
                 relativeLayout {
                     var t1 = textView {
                         id = R.id.textView1
-                        textAppearance = android.R.attr.textAppearanceMedium
+                        textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         text = "Original Text"
                     }.lparams{
-                        topMargin = dip(60)
+                        //topMargin = dip(60)
                         alignWithParent = true
                         alignParentLeft()
                         alignParentTop()
@@ -96,21 +97,22 @@ class EncryptActivity : AppCompatActivity(){
                         alignParentRight()
                         below(decodeText)
                     }
+                    lateinit var switchFU : Switch
+                    lateinit var switchETE : Switch
                     var extraArg = scrollView {
                         visibility = GONE
 
                         id = R.id.list_view
-                        verticalLayout {
-                            switch {
+                        var vl = verticalLayout {
+                            switchFU = switch {
                                 id = R.id.switchFU
                                 text = "Force Unicode Mode"
                             }.lparams{
                                 padding = dip(10)
                             }
-                            switch {
+                            switchETE = switch {
                                 id = R.id.switchETE
                                 text = "Encode the key"
-
                             }.lparams {
                                 padding = dip(10)
                             }
@@ -118,6 +120,7 @@ class EncryptActivity : AppCompatActivity(){
                             minimumWidth = 25
                             minimumHeight = 25
                         }
+
                     }.lparams{
                         minimumWidth = 25
                         minimumHeight = 25
@@ -141,7 +144,7 @@ class EncryptActivity : AppCompatActivity(){
 
                     var t2 = textView {
                         id = R.id.textView2
-                        textAppearance = android.R.attr.textAppearanceMedium
+                        textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
                         text = "Encoded Text"
                     }.lparams{
                         below(butDecode)
@@ -156,7 +159,7 @@ class EncryptActivity : AppCompatActivity(){
                     }
                     butEncode.onClick {
                         when (encodeTypes[encodeType.selectedItemPosition]) {
-//                            "crmkjk" -> encodeText.text = CRMKJK.CRMKJK.EncodeEasy(editTextOrigin.Text, (if (switchForceUnicode.Checked) CRMKJKState.Unicode else 0) or if (switchEncodeTextEncode.Checked) CRMKJKState.EncodeTextB64Encode else 0)
+                            "crmkjk" -> encodeText.setText(encode(decodeText.text.toString(), (if (switchFU.isChecked) UNICODE else 0) or if (switchETE.isChecked) ENCODE_TEXT_BASE64_ENCODE else 0))
                             "base64" -> {
                                 if (!decodeText.text.isNullOrBlank())
                                     encodeText.setText(Base64.encodeToString((decodeText.text.toString()).toByteArray(), Base64.DEFAULT))
@@ -170,15 +173,15 @@ class EncryptActivity : AppCompatActivity(){
                     butDecode.onClick {
                         when(encodeTypes[encodeType.selectedItemPosition])
                         {
-/*                            "crmkjk" ->
+                            "crmkjk" ->
                             try
                             {
-                                decodeText.setText(CRMKJK.decode(encodeText.text.toString()))
+                                decodeText.setText(decode(encodeText.text.toString()))
                             }
                             catch (e : UnexpectedCRMKJKEncodeException)
                             {
                                 toast("ERROR: unexpected crmkjk encode")
-                            }*/
+                            }
                             "base64"->
                             if (!encodeText.text.isNullOrBlank())
                             try
@@ -208,11 +211,11 @@ class EncryptActivity : AppCompatActivity(){
 
                         onClick {
                             alert {
-                                yesButton {
+                                positiveButton("Encrypt") {
                                     buildChooser(2333)
                                 }
 
-                                noButton {
+                                negativeButton("Decrypt") {
                                     buildChooser(6666)
                                 }
                             }.show()
@@ -269,13 +272,13 @@ class EncryptActivity : AppCompatActivity(){
             return
         }
 
-        var chooserIntent = Intent.createChooser(if (usefolderone) selectFolderIntent else smfi, getText(R.string.PickImage))
+        var chooserIntent: Intent
         chooserIntent = Intent(Intent.ACTION_CHOOSER)
         chooserIntent.putExtra(Intent.EXTRA_TITLE, "Open as...")
         var forEditing = SpannableString(" (selecting multiple files)")
-        forEditing.setSpan(ForegroundColorSpan(Color.CYAN), 0, forEditing.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+        forEditing.setSpan(ForegroundColorSpan(Color.BLACK), 0, forEditing.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        var extraIntents = arrayListOf<Intent>()
+        var extraIntents = arrayOfNulls<Intent>(a.size)
         for (i in a.indices) {
             var ri = a[i]
             var packageName = ri.activityInfo.packageName
@@ -290,8 +293,8 @@ class EncryptActivity : AppCompatActivity(){
         }
 
         forEditing = SpannableString(" (selecting folder)")
-        forEditing.setSpan(ForegroundColorSpan(Color.CYAN), 0, forEditing.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
-        var extraIntents1 = arrayListOf<Intent>()
+        forEditing.setSpan(ForegroundColorSpan(Color.BLACK), 0, forEditing.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var extraIntents1 = arrayOfNulls<Intent>(a1.size)
         for (i in a1.indices) {
             var ri = a1[i]
             var packageName = ri.activityInfo.packageName
@@ -304,9 +307,9 @@ class EncryptActivity : AppCompatActivity(){
 
         var final: ArrayList<Intent>
         if (!usefolderone) {
-            final = extraIntents.plus(extraIntents1) as ArrayList<Intent>
+            final = extraIntents.plus(extraIntents1).toMutableList() as ArrayList<Intent>
         } else {
-            final = extraIntents1
+            final = extraIntents1.toMutableList() as ArrayList<Intent>
         }
         if (final.size != 0) {
             chooserIntent.putExtra(Intent.EXTRA_INTENT, final[0])
@@ -333,5 +336,12 @@ class EncryptActivity : AppCompatActivity(){
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == -1){
+                startService(intentFor<CryptImagesService>("dir" to data?.data, "files" to data?.clipData, "decrypt" to (requestCode == 6666)))
+        }
     }
 }
