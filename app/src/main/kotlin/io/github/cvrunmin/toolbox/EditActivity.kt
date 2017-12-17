@@ -1,8 +1,10 @@
 package io.github.cvrunmin.toolbox
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.*
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -30,6 +32,7 @@ import org.jetbrains.anko.support.v4.drawerLayout
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
+import java.util.regex.Pattern
 import kotlin.experimental.inv
 
 
@@ -287,12 +290,36 @@ class EditActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
+    var rotation = 0
+    var flips = booleanArrayOf(false,false)
     fun setImage(url : Uri){
         uri = url
+        try{
+            var exif = ExifInterface(getRealPathFromUri(uri))
+            var ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            rotation = 0
+            flips.fill(false, 0, 1)
+            when(ori){
+                ExifInterface.ORIENTATION_NORMAL -> rotation = 0
+                ExifInterface.ORIENTATION_ROTATE_90 -> rotation = 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> rotation = 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> rotation = 270
+                ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flips[0] = true
+                ExifInterface.ORIENTATION_FLIP_VERTICAL -> flips[1] = true
+                ExifInterface.ORIENTATION_TRANSPOSE -> {rotation = 270; flips[0] = true}
+                ExifInterface.ORIENTATION_TRANSVERSE -> {rotation = 90; flips[0] = true}
+            }
+        }catch (e : Exception){}
         imageView.setImageURI(uri)
         map = android.provider.MediaStore.Images.Media.getBitmap(contentResolver, uri)
         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+        imageView.rotation = rotation.toFloat()
+        if(flips.any { flag->flag }){
+            imageView.scaleType = ImageView.ScaleType.MATRIX
+            val matrix = Matrix()
+            matrix.postScale(if(flips[0]) -1f else 1f,if(flips[1]) -1f else 1f)
+            imageView.imageMatrix = matrix
+        }
         layoutHandle.visibility = VISIBLE
     }
 
@@ -329,9 +356,25 @@ class EditActivity : AppCompatActivity() {
         if(!file.exists()) file.createNewFile()
         var fullname = file.absolutePath
         try {
+            var format = if(Pattern.matches("\\w+(.jpg|.jpeg|.jpe|.jfif)",filename.removePrefix("/"))) Bitmap.CompressFormat.JPEG else if(filename.endsWith(".png")) Bitmap.CompressFormat.PNG else Bitmap.CompressFormat.WEBP
             FileOutputStream(fullname).use {
-                var format = if(Regex.fromLiteral("\\w+(.jpg|.jpeg|.jpe|.jfif)").matches(filename)) Bitmap.CompressFormat.JPEG else if(filename.endsWith(".png")) Bitmap.CompressFormat.PNG else Bitmap.CompressFormat.WEBP
                 map!!.compress(format, 100, it)
+            }
+            if(format == Bitmap.CompressFormat.JPEG){
+                var exif = ExifInterface(fullname)
+                var attr = ExifInterface.ORIENTATION_UNDEFINED
+                when{
+                    (rotation == 0) and flips.none { flag->flag } -> attr = ExifInterface.ORIENTATION_NORMAL
+                    (rotation == 0) and flips[0] -> attr = ExifInterface.ORIENTATION_FLIP_HORIZONTAL
+                    (rotation == 0) and flips[1] -> attr = ExifInterface.ORIENTATION_FLIP_VERTICAL
+                    (rotation == 90) and flips[0] -> attr = ExifInterface.ORIENTATION_TRANSVERSE
+                    (rotation == 270) and flips[0] -> attr = ExifInterface.ORIENTATION_TRANSPOSE
+                    (rotation == 270) and flips.none { flag->flag } -> attr = ExifInterface.ORIENTATION_ROTATE_270
+                    (rotation == 180) and flips.none { flag->flag } -> attr = ExifInterface.ORIENTATION_ROTATE_180
+                    (rotation == 90) and flips.none { flag->flag } -> attr = ExifInterface.ORIENTATION_ROTATE_90
+                }
+                exif.setAttribute(ExifInterface.TAG_ORIENTATION, attr.toString())
+                exif.saveAttributes()
             }
             var mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             mediaScanIntent.setData(Uri.fromFile(file))
