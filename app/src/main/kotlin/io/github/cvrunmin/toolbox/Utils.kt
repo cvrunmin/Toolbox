@@ -2,6 +2,9 @@ package io.github.cvrunmin.toolbox
 
 import android.app.Activity
 import android.provider.MediaStore
+import android.view.ViewManager
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+import org.jetbrains.anko.custom.ankoView
 
 fun Activity.getRealPathFromUri(uri : android.net.Uri) : String
 {
@@ -40,3 +43,7 @@ fun isExternalStorageDocument (uri : android.net.Uri) : Boolean
 {
     return "com.android.externalstorage.documents".equals(uri.authority);
 }
+
+fun ViewManager.discreteSeekBar(theme: Int = 0) = discreteSeekBar(theme){}
+
+fun ViewManager.discreteSeekBar(theme: Int = 0, init: DiscreteSeekBar.() -> Unit) = ankoView({DiscreteSeekBar(it)}, theme, init)

@@ -18,4 +18,10 @@
     <item name="switchFU" type="id"/>
     <item name="switchETE" type="id"/>
     <item name="butEDImgs" type="id"/>
+    <item name="rel_layout" type="id" />
+    <item name="seekBarTH" type="id" />
+    <item name="butCancel" type="id" />
+    <item name="unknown_vg" type="id" />
+    <item name="rel_layout_1" type="id" />
+    <item name="rel_slide" type="id" />
 </resources>

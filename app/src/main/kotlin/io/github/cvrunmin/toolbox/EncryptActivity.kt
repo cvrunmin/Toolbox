@@ -74,6 +74,7 @@ class EncryptActivity : AppCompatActivity(){
                     var decodeText = editText {
                         id = R.id.editTextO
                         inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                        title = "Original Text"
                     }.lparams(height = dip(100)){
                         alignWithParent = true
                         alignParentLeft()
@@ -152,6 +153,7 @@ class EncryptActivity : AppCompatActivity(){
                     var encodeText = editText {
                         id = R.id.editTextE
                         inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                        title = "Encoded Text"
                     }.lparams{
                         width = matchParent
                         height = dip(100)

@@ -25,7 +25,7 @@
         <activity
             android:name=".EditActivity"
             android:label="Image Editor"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" android:exported="true"/>
         <activity
             android:name=".EncryptActivity"
             android:label="Encrypter"
