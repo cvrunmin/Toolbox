@@ -329,6 +329,136 @@ class EditActivity : AppCompatActivity() {
                                     setMargins(dip(5), dip(-5), dip(5), 0)
                                     padding = 0
                                 }
+                                imageButton(R.mipmap.ic_saturation) {
+                                    scaleType = ImageView.ScaleType.FIT_CENTER
+                                    onClick {
+                                        var tsb: SeekBar? = null
+                                        createSlidesDialog(UI {
+                                            relativeLayout {
+                                                id = R.id.rel_layout_1
+                                                var iv = imageView(R.mipmap.ic_saturation){
+                                                    id = R.id.imgIcon
+                                                }.lparams {
+                                                    alignParentTop()
+                                                    setMargins(dip(10), dip(10), dip(5), dip(10))
+                                                }
+                                                textView("Saturation"){
+                                                    textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                                                }.lparams {
+                                                    alignParentTop()
+                                                    rightOf(iv)
+                                                    setMargins(dip(5), dip(10), dip(10), dip(10))
+                                                }
+                                                var tc = textView(){
+                                                    id = R.id.text
+                                                    textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                                                }.lparams {
+                                                    alignParentRight()
+                                                    bottomOf(iv)
+                                                    setMargins(dip(5), dip(10), dip(10), dip(10))
+                                                }
+                                                tsb = themedSeekBar(R.style.Widget_AppCompat_SeekBar_Discrete) {
+                                                    id = R.id.seekBarTH
+                                                    max = 200
+                                                    onSeekBarChangeListener {
+                                                        onProgressChanged { seekBar, i, b ->
+                                                            if (!this@themedSeekBar.isShown) return@onProgressChanged
+                                                            val processed = this@themedSeekBar.progress
+                                                            val fl = processed / 100f
+                                                            tc.text = String.format("%.2f", fl)
+                                                            var cm = ColorMatrix()
+                                                            cm.setSaturation(fl)
+                                                            previewImageByMatrix(cm)
+                                                        }
+                                                    }
+                                                    progress = 100
+                                                }.lparams(width = matchParent) {
+                                                    alignParentLeft()
+                                                    bottomOf(iv)
+                                                    leftOf(tc)
+                                                    setMargins(dip(10), dip(10), dip(5), dip(10))
+                                                }
+                                            }
+                                        }.view, {
+                                            val fl = tsb!!.progress / 100f
+                                            var cm = ColorMatrix()
+                                            cm.setSaturation(fl)
+                                            modifyImageByMatrix(cm)
+                                        })
+                                    }
+                                }.lparams(width = dip(60), height = dip(60)) {
+                                    setMargins(dip(5), dip(-5), dip(5), 0)
+                                    padding = 0
+                                }
+                                imageButton(R.drawable.ic_menu_flip) {
+                                    scaleType = ImageView.ScaleType.FIT_CENTER
+                                    onClick {
+                                        var tsb: SeekBar? = null
+                                        createSlidesDialog(UI {
+                                            relativeLayout {
+                                                id = R.id.rel_layout_1
+                                                var iv = imageView(R.mipmap.ic_saturation){
+                                                    id = R.id.imgIcon
+                                                }.lparams {
+                                                    alignParentTop()
+                                                    setMargins(dip(10), dip(10), dip(5), dip(10))
+                                                }
+                                                textView("Contrast"){
+                                                    textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                                                }.lparams {
+                                                    alignParentTop()
+                                                    rightOf(iv)
+                                                    setMargins(dip(5), dip(10), dip(10), dip(10))
+                                                }
+                                                var tc = textView(){
+                                                    id = R.id.text
+                                                    textAppearance = android.R.style.TextAppearance_DeviceDefault_Medium
+                                                }.lparams {
+                                                    alignParentRight()
+                                                    bottomOf(iv)
+                                                    setMargins(dip(5), dip(10), dip(10), dip(10))
+                                                }
+                                                tsb = themedSeekBar(R.style.Widget_AppCompat_SeekBar_Discrete) {
+                                                    id = R.id.seekBarTH
+                                                    max = 100
+                                                    onSeekBarChangeListener {
+                                                        onProgressChanged { seekBar, i, b ->
+                                                            if (!this@themedSeekBar.isShown) return@onProgressChanged
+                                                            val processed = this@themedSeekBar.progress
+                                                            val fl = processed / 10f
+                                                            var tr = (-.5f * fl + .5f) * 255f;
+                                                            tc.text = String.format("%.1f", fl)
+                                                            previewImageByMatrix(ColorMatrix(floatArrayOf(
+                                                                    fl,0f,0f,0f,tr,
+                                                                    0f,fl,0f,0f,tr,
+                                                                    0f,0f,fl,0f,tr,
+                                                                    0f,0f,0f,1f,0f
+                                                            )))
+                                                        }
+                                                    }
+                                                    progress = 10
+                                                }.lparams(width = matchParent) {
+                                                    alignParentLeft()
+                                                    bottomOf(iv)
+                                                    leftOf(tc)
+                                                    setMargins(dip(10), dip(10), dip(5), dip(10))
+                                                }
+                                            }
+                                        }.view, {
+                                            val fl = tsb!!.progress / 10f
+                                            var tr = (-.5f * fl + .5f) * 255f;
+                                            modifyImageByMatrix(ColorMatrix(floatArrayOf(
+                                                    fl,0f,0f,0f,tr,
+                                                    0f,fl,0f,0f,tr,
+                                                    0f,0f,fl,0f,tr,
+                                                    0f,0f,0f,1f,0f
+                                                    )))
+                                        })
+                                    }
+                                }.lparams(width = dip(60), height = dip(60)) {
+                                    setMargins(dip(5), dip(-5), dip(5), 0)
+                                    padding = 0
+                                }
                                 imageButton(R.drawable.ic_rgbmono) {
                                     scaleType = ImageView.ScaleType.FIT_CENTER
                                     onClick {
@@ -668,6 +798,18 @@ class EditActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.w("Toolbox", e)
         }
+    }
+
+
+    fun previewImageByMatrix(matrix: ColorMatrix) {
+        var bm = Bitmap.createBitmap(map!!.width, map!!.height, map!!.config)
+        var c = Canvas(bm)
+        var p = Paint()
+        p.setColorFilter(ColorMatrixColorFilter(matrix))
+        c.drawBitmap(map, 0f, 0f, p)
+        pmap?.recycle()
+        pmap = bm
+        imageView.setImageBitmap(pmap)
     }
 
     fun modifyImageRS(procedure: ((Allocation, Allocation, RenderScript) -> Allocation)) {
