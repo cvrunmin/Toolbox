@@ -137,7 +137,6 @@ class EditActivity : AppCompatActivity() {
                                                     progressBackgroundTintList = ColorStateList.valueOf(Color.WHITE)
                                                     progressBackgroundTintMode = PorterDuff.Mode.MULTIPLY
                                                     thumbTintList = ColorStateList.valueOf(Color.WHITE)
-                                                    thumbTintMode = PorterDuff.Mode.LIGHTEN
                                                     onSeekBarChangeListener {
                                                         onProgressChanged { seekBar, i, b ->
                                                             if (!this@themedSeekBar.isShown) return@onProgressChanged

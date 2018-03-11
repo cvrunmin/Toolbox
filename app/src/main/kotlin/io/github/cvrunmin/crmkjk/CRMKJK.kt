@@ -16,10 +16,10 @@ data class KeyPair<T,V>(val a:T, val b:V)
     val UNICODE = 0b1
     val ENCODE_TEXT_BASE64_ENCODE = 0b10
     var random = Random()
-    fun encode(src : String, seed : Int, encoding: Charset = Charsets.UTF_16, state : Int = 0) : String{
+    fun encode(src : String, seed : Int, encoding: Charset = Charsets.UTF_16LE, state : Int = 0) : String{
         return encode(src, Random(seed.toLong()), encoding, state)
     }
-    fun encode(src : String, rand : Random = random, encoding: Charset = Charsets.UTF_16, state : Int = 0) : String{
+    fun encode(src : String, rand : Random = random, encoding: Charset = Charsets.UTF_16LE, state : Int = 0) : String{
         var src = src
         var state = state
         if(!src.isASCII() or ((state and  UNICODE) != 0)){
@@ -93,7 +93,7 @@ data class KeyPair<T,V>(val a:T, val b:V)
 
         return sb.toString()
     }
-    fun decode(src : String, encoding : Charset = Charsets.UTF_16) : String{
+    fun decode(src : String, encoding : Charset = Charsets.UTF_16LE) : String{
         if(src.isNullOrBlank()) return ""
         var src = src
         var match = Pattern.compile("(b)?(u)?(z)?(\\d{3,10}?)(=)?").matcher(src)
@@ -120,11 +120,12 @@ data class KeyPair<T,V>(val a:T, val b:V)
             try
             {
                 tmp1 = a.toString(encoding)
-                var regex = Pattern.compile("(\\d{3}?(?==))").matcher(tmp1)
+                var pattern = Pattern.compile("(\\d{3}?(?==))")
+                var regex = pattern.matcher(tmp1)
                 if (regex.find())
                 {
                     src =  tmp1 + src.substring(encodeRequired)
-                    src = regex.replaceFirst("")
+                    src = pattern.matcher(src).replaceFirst("")
                     encodeRequired = regex.group(0).toInt()
                 }
                 regex = null;
