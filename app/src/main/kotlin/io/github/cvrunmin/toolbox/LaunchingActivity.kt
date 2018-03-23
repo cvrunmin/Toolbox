@@ -1,5 +1,6 @@
 package io.github.cvrunmin.toolbox
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -24,6 +25,10 @@ import android.content.pm.PackageManager
 import android.widget.ListView
 import org.jetbrains.anko.sdk25.coroutines.onItemLongClick
 import org.jetbrains.anko.sdk25.coroutines.onLongClick
+import java.util.*
+import android.content.pm.ResolveInfo
+
+
 
 
 class LaunchingActivity : AppCompatActivity() {
@@ -57,10 +62,16 @@ class LaunchingActivity : AppCompatActivity() {
 
                     onItemLongClick { p0, p1, p2, p3 ->
                         val info = (adapter as AppAdapter).getItem(p2)
-                        val launchIntent = packageManager.getLaunchIntentForPackage(info.packageName)
-                        if (launchIntent != null) {
+                        var ai = info.activityInfo
+                        var cn = ComponentName(ai.applicationInfo.packageName, ai.name)
+                        val launchIntent = Intent(Intent.ACTION_MAIN)
+                        launchIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+                        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+                        launchIntent.setComponent(cn)
+                        //val launchIntent = packageManager.getLaunchIntentForPackage(info.packageName)
+                        //if (launchIntent != null) {
                             startActivity(launchIntent)
-                        }
+                        //}
                     }
                 }
             }.lparams(width = matchParent, height = matchParent)
@@ -90,8 +101,13 @@ class LaunchingActivity : AppCompatActivity() {
             }
         }
 
-        val packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-        packages.sortBy({ packageManager.getApplicationLabel(it) as String })
+        //val packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+        //Collections.sort(packages, ApplicationInfo.DisplayNameComparator(packageManager))
+        //Launchable ver
+        val main = Intent(Intent.ACTION_MAIN, null)
+        main.addCategory(Intent.CATEGORY_LAUNCHER)
+        val packages = packageManager.queryIntentActivities(main, 0)
+        Collections.sort(packages, ResolveInfo.DisplayNameComparator(packageManager))
         listApp.adapter = AppAdapter(this@LaunchingActivity, 0, packages)
     }
 
@@ -116,8 +132,8 @@ class LaunchingActivity : AppCompatActivity() {
     }
 }
 
-class AppAdapter(context: Context?, resource: Int, objects: MutableList<ApplicationInfo>) : ArrayAdapter<ApplicationInfo>(context, resource, objects) {
-    var items : MutableList<ApplicationInfo> = objects
+class AppAdapter(context: Context?, resource: Int, objects: MutableList<ResolveInfo>) : ArrayAdapter<ResolveInfo>(context, resource, objects) {
+    var items : MutableList<ResolveInfo> = objects
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val item = getItem(position)
@@ -141,13 +157,13 @@ class AppAdapter(context: Context?, resource: Int, objects: MutableList<Applicat
                         rightOf(icon)
                         below(appName)
                     }
-                    val expectedName = context.packageManager.getApplicationLabel(item)
+                    val expectedName = item.loadLabel(packageManager)
                     if (expectedName.isNullOrBlank()){
-                        packageName.visibility = View.GONE;
-                        appName.text = item.packageName;
+                        packageName.visibility = View.GONE
+                        appName.text = item.activityInfo.applicationInfo.packageName
                     }else{
-                        appName.text = expectedName;
-                        packageName.text = item.packageName;
+                        appName.text = expectedName
+                        packageName.text = item.activityInfo.applicationInfo.packageName
                     }
                 }
             }
